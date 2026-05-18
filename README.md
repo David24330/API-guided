@@ -271,7 +271,12 @@ nelmio_api_doc:
             path_patterns:
                 - ^/api
 ```
-
+### route.yaml
+```yaml
+api_doc:
+    path: /api/doc
+    controller: nelmio_api_doc.controller.swagger_ui
+```
 ### URL Swagger
 
 ```text
