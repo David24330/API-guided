@@ -134,7 +134,7 @@ composer require lexik/jwt-authentication-bundle
 
 ### Générer les clés
 
-Méthode 2 (Git OpenSSL)
+Méthode (Git OpenSSL)
 ```bash
 & "C:\Program Files\Git\usr\bin\openssl.exe" genrsa -out config/jwt/private.pem 4096
 ```
@@ -149,6 +149,45 @@ JWT_PUBLIC_KEY=%kernel.project_dir%/config/jwt/public.pem
 JWT_PASSPHRASE=
 ```
 
+### security.yaml
+
+Symfony doit savoir où chercher l’utilisateur :
+```YAML
+security:
+    providers:
+        app_user_provider:
+            entity:
+                class: App\Entity\User
+                property: email
+```
+```YAML
+password_hashers:
+    App\Entity\User:
+        algorithm: auto
+```
+```YAML
+firewalls:
+
+    login:
+        pattern: ^/api/login
+        stateless: true
+        json_login:
+            check_path: /api/login
+            username_path: email
+            password_path: password
+            success_handler: lexik_jwt_authentication.handler.authentication_success
+            failure_handler: lexik_jwt_authentication.handler.authentication_failure
+
+    api:
+        pattern: ^/api
+        stateless: true
+        jwt: ~
+```
+```YAML
+access_control:
+    - { path: ^/api/login, roles: PUBLIC_ACCESS }
+    - { path: ^/api, roles: IS_AUTHENTICATED_FULLY }
+```
 ### Login API
 
 **Route :** `POST /api/login`
