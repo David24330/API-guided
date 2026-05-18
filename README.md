@@ -134,10 +134,13 @@ composer require lexik/jwt-authentication-bundle
 
 ### Générer les clés
 
+Méthode 2 (Git OpenSSL)
 ```bash
-php bin/console lexik:jwt:generate-keypair
+& "C:\Program Files\Git\usr\bin\openssl.exe" genrsa -out config/jwt/private.pem 4096
 ```
-
+```bash
+& "C:\Program Files\Git\usr\bin\openssl.exe" rsa -pubout -in config/jwt/private.pem -out config/jwt/public.pem
+```
 ### Configuration `.env`
 
 ```env
