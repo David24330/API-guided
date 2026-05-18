@@ -123,6 +123,9 @@ curl -X DELETE http://127.0.0.1:8000/api/formations/1
 
 ## 3. JWT Auth (obligatoire examen)
 
+### Suivre le cours d'API slide 136
+
+
 ### Installation
 
 ```bash
