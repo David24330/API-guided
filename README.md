@@ -125,6 +125,30 @@ curl -X DELETE http://127.0.0.1:8000/api/formations/1
 
 ### Suivre le cours d'API slide 136
 
+### Création du formulaire d'enregistrement pour un user
+```php
+#[Route('/api/register', methods: ['POST'])]
+public function register(
+    Request $request,
+    UserPasswordHasherInterface $hasher,
+    EntityManagerInterface $em
+): JsonResponse {
+
+    $data = json_decode($request->getContent(), true);
+
+    $user = new User();
+    $user->setEmail($data['email']);
+
+    $user->setPassword(
+        $hasher->hashPassword($user, $data['password'])
+    );
+
+    $em->persist($user);
+    $em->flush();
+
+    return $this->json(['message' => 'user created'], 201);
+}
+```
 
 ### Installation
 
