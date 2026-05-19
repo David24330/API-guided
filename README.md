@@ -46,15 +46,31 @@ public function index(FormationRepository $repo): JsonResponse
 ### GET formation by id
 
 ```php
-#[Route('/api/formations/{id}', methods: ['GET'])]
-public function show(Formation $formation): JsonResponse
+#[Route('/api/formations', methods: ['POST'])]
+public function create(
+    Request $request,
+    EntityManagerInterface $em,
+    CompetenceRepository $competenceRepository
+): JsonResponse
 {
-    return $this->json(
-        $formation,
-        200,
-        [],
-        ['groups' => 'formation:read']
-    );
+    $data = json_decode($request->getContent(), true);
+
+    $formation = new Formation();
+    $formation->setTitle($data['title']);
+
+    foreach ($data['competences'] as $competenceId) {
+
+        $competence = $competenceRepository->find($competenceId);
+
+        if ($competence) {
+            $formation->addCompetence($competence);
+        }
+    }
+
+    $em->persist($formation);
+    $em->flush();
+
+    return $this->json($formation, 201);
 }
 ```
 
