@@ -42,6 +42,23 @@ public function index(FormationRepository $repo): JsonResponse
     );
 }
 ```
+### Fonctions pour le ManyToMany
+
+```php
+public function addCompetence(Competence $competence): static
+{
+        if (!$this->competences->contains($competence)) {
+            $this->competences->add($competence);
+}
+
+        return $this;
+    }
+
+public function getCompetences():Collection
+    {
+        return $this->competences;
+    }
+```
 
 ### GET formation by id
 
